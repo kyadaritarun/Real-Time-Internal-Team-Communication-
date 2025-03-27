@@ -31,7 +31,7 @@ router.get('/messages/private/:userId', authenticate, async (req, res) => {
             sender: { _id: file.sender._id, name: file.sender.name },
             file: {
                 name: file.originalName,
-                url: `http://localhost:3000${file.path}`,
+                url: `https://kyadari-tarun-internal-chatbox.onrender.com${file.path}`,
                 size: file.size,
                 mimeType: file.mimeType,
                 _id: file._id
@@ -67,7 +67,7 @@ router.get('/messages/group/:groupId', authenticate, async (req, res) => {
             sender: { _id: file.sender._id, name: file.sender.name },
             file: {
                 name: file.originalName,
-                url: `http://localhost:3000${file.path}`,
+                url: `https://kyadari-tarun-internal-chatbox.onrender.com${file.path}`,
                 size: file.size,
                 mimeType: file.mimeType,
                 _id: file._id

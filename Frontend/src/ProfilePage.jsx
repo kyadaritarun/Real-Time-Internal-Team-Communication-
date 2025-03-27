@@ -43,7 +43,7 @@ const ProfilePage = ({ token }) => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/users/me', {
+      const response = await axios.get('https://kyadari-tarun-internal-chatbox.onrender.com/api/users/me', {
         headers: { Authorization: token },
       });
       setUser((prev) => ({
@@ -73,7 +73,7 @@ const ProfilePage = ({ token }) => {
         formData.append('photo', file);
 
         const response = await axios.post(
-          'http://localhost:3000/api/upload/profile-photo',
+          'https://kyadari-tarun-internal-chatbox.onrender.com/api/upload/profile-photo',
           formData,
           {
             headers: {
@@ -105,7 +105,7 @@ const ProfilePage = ({ token }) => {
     };
     if (isEditing) {
       try {
-        await axios.put('http://localhost:3000/api/users/me', user, {
+        await axios.put('https://kyadari-tarun-internal-chatbox.onrender.com/api/users/me', user, {
           headers: { Authorization: token },
         });
         addNotification('Profile updated successfully');
