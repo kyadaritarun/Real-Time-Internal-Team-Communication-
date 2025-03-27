@@ -28,7 +28,7 @@ function Home() {
         <p className="text-gray-800 mb-4 text-sm sm:text-base md:text-lg 
                      hover:text-gray-800 font-inter"
         >
-        "Where Speed Meets Reliability in Every Message."
+        "Your Conversations is Protected."
         </p>
         <div className="flex flex-col sm:flex-row justify-around gap-3 sm:gap-0">
           <button 
