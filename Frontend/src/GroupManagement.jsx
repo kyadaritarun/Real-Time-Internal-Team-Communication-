@@ -39,9 +39,9 @@
     const handleCreateGroup = async () => {
       if (!groupName.trim() || selectedMembers.length === 0) return alert(!groupName.trim() ? "Please enter a group name." : "Please select at least one member.");
       try {
-        const createResponse = await axios.post("https://kyadari-tarun-internal-chatbox.onrender.com/api/groups", { name: groupName }, { headers: { Authorization: `Bearer ${token}` } });
+        const createResponse = await axios.post("http://localhost:3000/api/groups", { name: groupName }, { headers: { Authorization: `Bearer ${token}` } });
         const groupId = createResponse.data._id;
-        await Promise.all(selectedMembers.filter((userId) => userId !== currentUserId).map((userId) => axios.put(`https://kyadari-tarun-internal-chatbox.onrender.com/api/groups/${groupId}/members`, { userId, canSendMessages: true, canCall: true }, { headers: { Authorization: `Bearer ${token}` } })));
+        await Promise.all(selectedMembers.filter((userId) => userId !== currentUserId).map((userId) => axios.put(`http://localhost:3000/api/groups/${groupId}/members`, { userId, canSendMessages: true, canCall: true }, { headers: { Authorization: `Bearer ${token}` } })));
         setGroups((prev) => [...prev, createResponse.data]);
         setGroupName(""); setSelectedMembers([]); setShowCreateGroup(false);
         console.log("Group created successfully:", createResponse.data);
@@ -55,22 +55,22 @@
       if (!userId || !groupId) return;
       const canSendMessages = window.confirm(`Allow ${safeRender(users.find((u) => u._id === userId)?.name, userId)} to send messages?`);
       const canCall = window.confirm(`Allow ${safeRender(users.find((u) => u._id === userId)?.name, userId)} to make calls?`);
-      try { const response = await axios.put(`https://kyadari-tarun-internal-chatbox.onrender.com/api/groups/${groupId}/members`, { userId, canSendMessages, canCall }, { headers: { Authorization: `Bearer ${token}` } }); setGroups((prev) => prev.map((g) => (g._id === groupId ? response.data : g))); } catch (error) { console.error("Error adding member:", error); }
+      try { const response = await axios.put(`http://localhost:3000/api/groups/${groupId}/members`, { userId, canSendMessages, canCall }, { headers: { Authorization: `Bearer ${token}` } }); setGroups((prev) => prev.map((g) => (g._id === groupId ? response.data : g))); } catch (error) { console.error("Error adding member:", error); }
     };
 
     const updateGroupPermissions = async (groupId, userId, canSendMessages, canCall) => {
       if (!groupId || !userId) return;
-      try { const response = await axios.put(`https://kyadari-tarun-internal-chatbox.onrender.com/api/groups/${groupId}/permissions`, { userId, canSendMessages, canCall }, { headers: { Authorization: `Bearer ${token}` } }); setGroups((prev) => prev.map((g) => (g._id === groupId ? response.data : g))); } catch (error) { console.error("Error updating permissions:", error); }
+      try { const response = await axios.put(`http://localhost:3000/api/groups/${groupId}/permissions`, { userId, canSendMessages, canCall }, { headers: { Authorization: `Bearer ${token}` } }); setGroups((prev) => prev.map((g) => (g._id === groupId ? response.data : g))); } catch (error) { console.error("Error updating permissions:", error); }
     };
 
     const removeMemberFromGroup = async (groupId, userId) => {
       if (!window.confirm(`Remove ${safeRender(users.find((u) => u._id === userId)?.name, userId)} from the group?`)) return;
-      try { const response = await axios.delete(`https://kyadari-tarun-internal-chatbox.onrender.com/api/groups/${groupId}/members/${userId}`, { headers: { Authorization: `Bearer ${token}` } }); setGroups((prev) => prev.map((g) => (g._id === groupId ? response.data : g))); } catch (error) { console.error("Error removing member:", error); }
+      try { const response = await axios.delete(`http://localhost:3000/api/groups/${groupId}/members/${userId}`, { headers: { Authorization: `Bearer ${token}` } }); setGroups((prev) => prev.map((g) => (g._id === groupId ? response.data : g))); } catch (error) { console.error("Error removing member:", error); }
     };
 
     const deleteGroup = async (groupId) => {
       if (!window.confirm("Delete this group? This cannot be undone.")) return;
-      try { await axios.delete(`https://kyadari-tarun-internal-chatbox.onrender.com/api/groups/${groupId}`, { headers: { Authorization: `Bearer ${token}` } }); setGroups((prev) => prev.filter((g) => g._id !== groupId)); setEditingGroupId(null); setSelectedChat(null); setChatType(null); } catch (error) { console.error("Error deleting group:", error); }
+      try { await axios.delete(`http://localhost:3000/api/groups/${groupId}`, { headers: { Authorization: `Bearer ${token}` } }); setGroups((prev) => prev.filter((g) => g._id !== groupId)); setEditingGroupId(null); setSelectedChat(null); setChatType(null); } catch (error) { console.error("Error deleting group:", error); }
     };
 
     const toggleEditGroup = (groupId) => setEditingGroupId((prev) => (prev === groupId ? null : groupId));
@@ -104,7 +104,7 @@
               {filteredGroups.map((group) => (
                 <div key={group._id} className="p-2 relative">
                   <div className="flex items-center hover:bg-gray-50 cursor-pointer" onClick={() => { setSelectedChat(group._id); setChatType("group"); setShowOnlyGroups(false); setShowOnlyContacts(false); }}>
-                    <img src={group.image ? `https://kyadari-tarun-internal-chatbox.onrender.com/uploads/${group.image}` : defaultAvatar} alt={`${safeRender(group.name)} avatar`} className="w-8 h-8 rounded-full mr-2 object-cover" onClick={(e) => { e.stopPropagation(); if (isGroupAdmin(group._id) && !showOnlyGroups) toggleEditGroup(group._id); }} />
+                    <img src={group.image ? `http://localhost:3000/uploads/${group.image}` : defaultAvatar} alt={`${safeRender(group.name)} avatar`} className="w-8 h-8 rounded-full mr-2 object-cover" onClick={(e) => { e.stopPropagation(); if (isGroupAdmin(group._id) && !showOnlyGroups) toggleEditGroup(group._id); }} />
                     <div className="flex-1"><p className="text-gray-800 font-medium text-sm">{safeRender(group.name)}</p><p className="text-xs text-gray-500">{group.members.length} members</p></div>
                   </div>
                   {editingGroupId === group._id && isGroupAdmin(group._id) && !showOnlyGroups && (
@@ -112,7 +112,7 @@
                       <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
                         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <img src={group.image ? `https://kyadari-tarun-internal-chatbox.onrender.com/uploads/${group.image}` : defaultAvatar} alt={`${safeRender(group.name)} avatar`} className="w-10 h-10 rounded-full object-cover" />
+                            <img src={group.image ? `http://localhost:3000/uploads/${group.image}` : defaultAvatar} alt={`${safeRender(group.name)} avatar`} className="w-10 h-10 rounded-full object-cover" />
                             <div><h3 className="text-lg font-bold text-gray-800">Edit Group</h3><p className="text-xs text-gray-500">{safeRender(group.name)}</p></div>
                           </div>
                           <button onClick={() => setEditingGroupId(null)} className="p-1 hover:bg-gray-100 rounded-full"><svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
@@ -152,7 +152,7 @@
               <h2 className="text-xs font-semibold text-gray-500 px-2 mb-1">Direct Messages</h2>
               {filteredUsers.map((user) => (
                 <div key={user._id} className="flex items-center p-2 hover:bg-gray-50 cursor-pointer" onClick={() => { setSelectedChat(user._id); setChatType("user"); setShowOnlyContacts(false); setShowOnlyGroups(false); }}>
-                  <img src={user.image ? `https://kyadari-tarun-internal-chatbox.onrender.com/uploads/${user.image}` : defaultAvatar} alt={`${safeRender(user.name)} avatar`} className="w-8 h-8 rounded-full mr-2 object-cover" onClick={(e) => { e.stopPropagation(); showUserProfile(user._id); }} />
+                  <img src={user.image ? `http://localhost:3000/uploads/${user.image}` : defaultAvatar} alt={`${safeRender(user.name)} avatar`} className="w-8 h-8 rounded-full mr-2 object-cover" onClick={(e) => { e.stopPropagation(); showUserProfile(user._id); }} />
                   <div className="flex-1"><p className="text-gray-800 font-medium text-sm">{safeRender(user.name)}</p><p className="text-xs text-gray-500">{getLastMessageTime(user._id)}</p></div>
                 </div>
               ))}
