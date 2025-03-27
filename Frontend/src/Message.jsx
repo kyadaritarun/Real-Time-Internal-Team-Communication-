@@ -80,7 +80,7 @@ const Message = ({ token, privateKey }) => {
 
   const showUserProfile = async (userId) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/users/${userId}`, { headers: { Authorization: token } });
+      const response = await axios.get(`https://kyadari-tarun-internal-chatbox.onrender.com/api/users/${userId}`, { headers: { Authorization: token } });
       setSelectedUser(response.data);
     } catch (error) {
       console.error("Error fetching user profile:", error);
@@ -121,7 +121,7 @@ const Message = ({ token, privateKey }) => {
   useEffect(() => {
     if (!token || socket.current) return;
 
-    socket.current = io("http://localhost:3000", { auth: { token }, forceNew: true });
+    socket.current = io("https://kyadari-tarun-internal-chatbox.onrender.com", { auth: { token }, forceNew: true });
 
     socket.current.on("connect", () => console.log("Connected:", socket.current.id));
 
@@ -190,10 +190,10 @@ const Message = ({ token, privateKey }) => {
     socket.current.on("error", (error) => console.error("Socket error:", error.message));
 
     Promise.all([
-      axios.get("http://localhost:3000/api/users", { headers: { Authorization: token } }),
-      axios.get("http://localhost:3000/api/groups", { headers: { Authorization: token } }),
-      axios.get("http://localhost:3000/api/messages/last-messages", { headers: { Authorization: token } }),
-      axios.get(`http://localhost:3000/api/users/${socket.current?.userId || currentUserId}`, { headers: { Authorization: token } }),
+      axios.get("https://kyadari-tarun-internal-chatbox.onrender.com/api/users", { headers: { Authorization: token } }),
+      axios.get("https://kyadari-tarun-internal-chatbox.onrender.com/api/groups", { headers: { Authorization: token } }),
+      axios.get("https://kyadari-tarun-internal-chatbox.onrender.com/api/messages/last-messages", { headers: { Authorization: token } }),
+      axios.get(`https://kyadari-tarun-internal-chatbox.onrender.com/api/users/${socket.current?.userId || currentUserId}`, { headers: { Authorization: token } }),
     ])
       .then(([usersRes, groupsRes, lastMessagesRes, currentUserRes]) => {
         setUsers(usersRes.data);
@@ -228,8 +228,8 @@ const Message = ({ token, privateKey }) => {
         try {
           const url =
             chatType === "user"
-              ? `http://localhost:3000/api/messages/private/${selectedChat}`
-              : `http://localhost:3000/api/messages/group/${selectedChat}`;
+              ? `https://kyadari-tarun-internal-chatbox.onrender.com/api/messages/private/${selectedChat}`
+              : `https://kyadari-tarun-internal-chatbox.onrender.com/api/messages/group/${selectedChat}`;
           const res = await axios.get(url, { headers: { Authorization: token } });
           const processedMessages = res.data.map((msg) => ({
             ...msg,
@@ -273,7 +273,7 @@ const Message = ({ token, privateKey }) => {
       formData.append("tempId", tempId);
 
       try {
-        const response = await axios.post("http://localhost:3000/api/upload", formData, {
+        const response = await axios.post("https://kyadari-tarun-internal-chatbox.onrender.com/api/upload", formData, {
           headers: { Authorization: token, "Content-Type": "multipart/form-data" },
         });
         newMessage = {
@@ -359,7 +359,7 @@ const Message = ({ token, privateKey }) => {
           {currentUser ? (
             <div className="flex items-center space-x-3">
               <img
-                src={currentUser.image ? `http://localhost:3000/uploads/${currentUser.image}` : defaultAvatar}
+                src={currentUser.image ? `https://kyadari-tarun-internal-chatbox.onrender.com/uploads/${currentUser.image}` : defaultAvatar}
                 alt={`${safeRender(currentUser.name)} avatar`}
                 className="w-13 h-13 rounded-full object-cover cursor-pointer"
                 onClick={() => showUserProfile(currentUserId)}
@@ -518,7 +518,7 @@ const Message = ({ token, privateKey }) => {
                 <img
                   src={
                     users.find((u) => u._id === selectedChat)?.image
-                      ? `http://localhost:3000/uploads/${users.find((u) => u._id === selectedChat).image}`
+                      ? `https://kyadari-tarun-internal-chatbox.onrender.com/uploads/${users.find((u) => u._id === selectedChat).image}`
                       : "https://via.placeholder.com/40"
                   }
                   alt="Chat user avatar"
@@ -679,7 +679,7 @@ const Message = ({ token, privateKey }) => {
             <h3 className="text-lg sm:text-xl font-bold mb-4 text-center" style={{ color: "#8533ff" }}>User Profile</h3>
             {selectedUser.image && (
               <img
-                src={`http://localhost:3000/uploads/${selectedUser.image}`}
+                src={`https://kyadari-tarun-internal-chatbox.onrender.com/uploads/${selectedUser.image}`}
                 alt={`${safeRender(selectedUser.name)}'s profile`}
                 className="w-20 h-20 sm:w-24 sm:h-24 rounded-full mb-4 object-cover mx-auto"
               />

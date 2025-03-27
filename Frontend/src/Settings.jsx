@@ -33,7 +33,7 @@ const Settings = ({ token, isOpen, onClose, updateAuth }) => {
 
   const fetchUserProfile = async () => {
     try {
-      const response = await axios.get('http://localhost:3000/api/users/me', {
+      const response = await axios.get('https://kyadari-tarun-internal-chatbox.onrender.com/api/users/me', {
         headers: { Authorization: token },
       });
       setUser((prev) => ({
@@ -58,7 +58,7 @@ const Settings = ({ token, isOpen, onClose, updateAuth }) => {
       try {
         const formData = new FormData();
         formData.append('photo', file);
-        const response = await axios.post('http://localhost:3000/api/upload/profile-photo', formData, {
+        const response = await axios.post('https://kyadari-tarun-internal-chatbox.onrender.com/api/upload/profile-photo', formData, {
           headers: {
             Authorization: token,
             'Content-Type': 'multipart/form-data',
@@ -75,7 +75,7 @@ const Settings = ({ token, isOpen, onClose, updateAuth }) => {
 
   const saveProfileChanges = async () => {
     try {
-      const response = await axios.put('http://localhost:3000/api/users/me', user, {
+      const response = await axios.put('https://kyadari-tarun-internal-chatbox.onrender.com/api/users/me', user, {
         headers: { Authorization: token },
       });
       setUser((prev) => ({ ...prev, ...response.data }));
@@ -90,7 +90,7 @@ const Settings = ({ token, isOpen, onClose, updateAuth }) => {
 
   const handlePasswordChange = async () => {
     try {
-      await axios.put('http://localhost:3000/api/users/me', { password: newPassword }, {
+      await axios.put('https://kyadari-tarun-internal-chatbox.onrender.com/api/users/me', { password: newPassword }, {
         headers: { Authorization: token },
       });
       addNotification('Password updated successfully');
