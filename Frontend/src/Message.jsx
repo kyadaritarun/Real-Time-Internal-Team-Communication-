@@ -6,6 +6,8 @@ import { UserIcon, UsersIcon, PhoneIcon, BellIcon, CogIcon, PaperClipIcon, Adjus
 import GroupManagement from "./GroupManagement";
 import CallHandler from "./CallHandler";
 import Settings from "./Settings";
+import logo from "./assets/logo.png";
+import { motion } from "framer-motion";
 
 
 const safeRender = (value, fallback = "Unknown") => {
@@ -568,7 +570,7 @@ const Message = ({ token, privateKey }) => {
             e.target.style.backgroundImage = `url(${fallbackBackground})`;
           }}
         >
-          <div className="absolute inset-0 bg-gray-500 opacity-20"></div>
+          <div className="absolute inset-0 opacity-20"></div>
           <div className="relative z-10">
             {selectedChat ? (
               messages
@@ -606,10 +608,17 @@ const Message = ({ token, privateKey }) => {
                   );
                 })
             ) : (
-              <div className="flex items-center justify-center h-full text-gray-500 text-sm sm:text-base">
-                Select a chat to start messaging
-              </div>
-            )}
+<div className="flex flex-col items-center justify-center h-full text-gray-500 text-sm sm:text-base">
+  <motion.img
+    src={logo}
+    alt="Select a chat"
+    className="w-32 h-32 sm:w-70 sm:h-75 mt-10"
+    animate={{ y: [0, -10, 0] }} // Moves up and down
+    transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
+  />
+  <p>"We Don’t Just Promise, We Deliver!"</p>
+</div>
+            )}                                                                                                                    
           </div>
         </div>
 

@@ -1,6 +1,8 @@
   import React, { useState } from "react";
   import axios from "axios";
-
+  import { FaPhone } from 'react-icons/fa';
+  import { FaEnvelope } from "react-icons/fa";
+  import groupsic from "./assets/group-icons.jpg";
 
   const safeRender = (value, fallback = "Unknown") => {
     if (value === null || value === undefined) return fallback;
@@ -80,6 +82,7 @@
 
     return (
       <>
+       <div className="flex flex-col h-full">
         {/* Chats Section (Search Bar and Create Group Icon) */}
         <div className="p-2 border-b border-gray-200 flex items-center space-x-2">
           <input
@@ -97,14 +100,16 @@
         </div>
 
         {/* Main Content */}
-        <div className="overflow-y-auto h-[calc(100vh-190px)]">
+        <div className="overflow-y-auto flex-1 h-[calc(100vh-100px)]">
           {(showOnlyGroups || (!showOnlyGroups && !showOnlyContacts)) && filteredGroups.length > 0 && (
             <div className="p-2">
               <h2 className="text-xs font-semibold text-gray-500 px-2 mb-1">Groups</h2>
               {filteredGroups.map((group) => (
                 <div key={group._id} className="p-2 relative">
-                  <div className="flex items-center hover:bg-gray-50 cursor-pointer" onClick={() => { setSelectedChat(group._id); setChatType("group"); setShowOnlyGroups(false); setShowOnlyContacts(false); }}>
-                    <img src={group.image ? `https://kyadari-tarun-internal-chatbox.onrender.com/uploads/${group.image}` : defaultAvatar} alt={`${safeRender(group.name)} avatar`} className="w-8 h-8 rounded-full mr-2 object-cover" onClick={(e) => { e.stopPropagation(); if (isGroupAdmin(group._id) && !showOnlyGroups) toggleEditGroup(group._id); }} />
+                  <div 
+                  className="flex items-center hover:bg-gray-50 cursor-pointer"
+                   onClick={() => { setSelectedChat(group._id); setChatType("group"); setShowOnlyGroups(false); setShowOnlyContacts(false); }}>
+                    <img src={groupsic} alt={`${safeRender(group.name)} avatar`} className="w-8 h-8 rounded-full mr-2 object-cover" onClick={(e) => { e.stopPropagation(); if (isGroupAdmin(group._id) && !showOnlyGroups) toggleEditGroup(group._id); }} />
                     <div className="flex-1"><p className="text-gray-800 font-medium text-sm">{safeRender(group.name)}</p><p className="text-xs text-gray-500">{group.members.length} members</p></div>
                   </div>
                   {editingGroupId === group._id && isGroupAdmin(group._id) && !showOnlyGroups && (
@@ -112,8 +117,8 @@
                       <div className="bg-white rounded-xl shadow-xl w-full max-w-md">
                         <div className="p-4 border-b border-gray-100 flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <img src={group.image ? `https://kyadari-tarun-internal-chatbox.onrender.com/uploads/${group.image}` : defaultAvatar} alt={`${safeRender(group.name)} avatar`} className="w-10 h-10 rounded-full object-cover" />
-                            <div><h3 className="text-lg font-bold text-gray-800">Edit Group</h3><p className="text-xs text-gray-500">{safeRender(group.name)}</p></div>
+                            <img src={groupsic} alt={`${safeRender(group.name)} avatar`} className="w-10 h-10 rounded-full object-cover" />
+                            <div><h3 className="text-lg font-bold text-gray-800">Group Name</h3><p className="text-xs text-gray-500">{safeRender(group.name)}</p></div>
                           </div>
                           <button onClick={() => setEditingGroupId(null)} className="p-1 hover:bg-gray-100 rounded-full"><svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg></button>
                         </div>
@@ -124,8 +129,8 @@
                               <div key={`${safeRender(member.userId?._id || member.userId)}-${index}`} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
                                 <span className="text-xs font-medium text-gray-700 truncate max-w-[40%]">{safeRender(users.find((u) => u._id === safeRender(member.userId?._id || member.userId))?.name, member.userId)}</span>
                                 <div className="flex items-center gap-2">
-                                  <input type="checkbox" checked={member.canSendMessages || false} onChange={(e) => updateGroupPermissions(group._id, safeRender(member.userId?._id || member.userId), e.target.checked, member.canCall || false)} disabled={safeRender(member.userId?._id || member.userId) === currentUserId} className="rounded text-blue-500 h-3 w-3" />
-                                  <input type="checkbox" checked={member.canCall || false} onChange={(e) => updateGroupPermissions(group._id, safeRender(member.userId?._id || member.userId), member.canSendMessages || false, e.target.checked)} disabled={safeRender(member.userId?._id || member.userId) === currentUserId} className="rounded text-blue-500 h-3 w-3" />
+                                  <input type="checkbox" checked={member.canSendMessages || false} onChange={(e) => updateGroupPermissions(group._id, safeRender(member.userId?._id || member.userId), e.target.checked, member.canCall || false)} disabled={safeRender(member.userId?._id || member.userId) === currentUserId} className="rounded text-blue-500 h-3 w-3" /><p><FaEnvelope /></p>
+                                  <input type="checkbox" checked={member.canCall || false} onChange={(e) => updateGroupPermissions(group._id, safeRender(member.userId?._id || member.userId), member.canSendMessages || false, e.target.checked)} disabled={safeRender(member.userId?._id || member.userId) === currentUserId} className="rounded text-blue-500 h-3 w-3" /><p><FaPhone /></p>
                                   {safeRender(member.userId?._id || member.userId) !== currentUserId && <button onClick={() => removeMemberFromGroup(group._id, safeRender(member.userId?._id || member.userId))} className="p-1 hover:bg-red-100 rounded-full"><svg className="w-3 h-3 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg></button>}
                                 </div>
                               </div>
@@ -158,6 +163,7 @@
               ))}
             </div>
           )}
+        </div>
         </div>
 
         {/* Create Group Modal */}
