@@ -57,13 +57,11 @@ export default function SignIn({ authState, updateAuth }) {
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 sm:p-8">
         <div className="flex flex-col items-center space-y-4">
           <img
-            src= {icons} ///////////////
+            src= {icons}
             alt="Chat-bot-logo"
-            className="w-16 h-16 sm:w-20 sm:h-20 transition-transform duration-300 hover:scale-110"
+            className="w-16 h-16 sm:w-30 sm:h-30 transition-transform duration-300 hover:scale-110"
           />
           <div className="text-center">
-
-
             <h2 className="font-serif text-2xl sm:text-3xl font-bold text-blue-800 hover:text-blue-700 transition duration-300 mt-2">
               Welcome
             </h2>

@@ -67,9 +67,15 @@ const socketHandler = (io) => {
                         tempId: msgData.tempId,
                         timestamp: new Date(),
                     };
-                    if (msgData.recipient) {
-                        io.to(msgData.recipient).emit("chatMessage", fileMessage);
-                        io.to(socket.userId).emit("chatMessage", fileMessage);
+                  // Add this inside the if (msgData.file) block, after emitting "chatMessage" to recipient and sender
+if (msgData.recipient) {
+    io.to(msgData.recipient).emit("chatMessage", fileMessage);
+    io.to(socket.userId).emit("chatMessage", fileMessage);
+    io.to(msgData.recipient).emit("newMessageNotification", { // Add these lines
+      senderId: socket.userId,
+      tempId: msgData.tempId,
+      timestamp: fileMessage.timestamp,
+    })
                     } else if (msgData.group) {
                         io.to(msgData.group).emit("chatMessage", fileMessage);
                     }
@@ -115,6 +121,13 @@ const socketHandler = (io) => {
 
                     console.log("Emitting to sender:", senderMessage);
                     io.to(socket.userId).emit("chatMessage", senderMessage);
+
+                     io.to(msgData.recipient).emit("newMessageNotification", {
+                         senderId: socket.userId,
+                         messageId: savedMessage._id,
+                         timestamp: savedMessage.timestamp,
+                     });
+
                 } else if (msgData.group) {
                     message.group = msgData.group;
                     message.plaintextContent = msgData.content;

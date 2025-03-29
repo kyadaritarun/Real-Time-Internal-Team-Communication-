@@ -10,6 +10,10 @@ import logo from "./assets/logo.png";
 import { motion } from "framer-motion";
 
 
+// Notification sound (place notification.mp3 in public/)
+const notificationSound = new Audio('/notification.mp3');
+
+
 const safeRender = (value, fallback = "Unknown") => {
   if (value === null || value === undefined) return fallback;
   if (typeof value === "string") return value;
@@ -35,6 +39,7 @@ const Message = ({ token, privateKey }) => {
   const [showOnlyNotifications, setShowOnlyNotifications] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState({}); // Track unread messages per user
   const socket = useRef(null);
   const fileInputRef = useRef(null);
 
@@ -166,7 +171,20 @@ const Message = ({ token, privateKey }) => {
           return [...updated, { userId: safeRender(msg.sender?._id || msg.sender), lastMessageTime: msg.timestamp }];
         });
       }
-    });
+    });                                                                                                                             
+
+
+    // Add this inside the socket.current.on handlers, after "chatMessage" listener
+socket.current.on("newMessageNotification", ({ senderId, messageId, timestamp }) => {
+  if (selectedChat !== senderId) {
+    setUnreadMessages((prev) => ({
+      ...prev,
+      [senderId]: (prev[senderId] || 0) + 1,
+    }));
+    notificationSound.play().catch((err) => console.error("Sound play error:", err));
+  }
+});
+
 
     socket.current.on("startGroupCall", ({ groupId, callerId }) => {
       if (callerId !== currentUserId) {
@@ -241,6 +259,14 @@ const Message = ({ token, privateKey }) => {
               : decryptMessage(msg.encryptedContent, msg.content, !!msg.recipient, safeRender(msg.sender?._id || msg.sender), currentUserId),
           }));
           setMessages(processedMessages);
+        
+                  // Clear unread messages when chat is opened
+          setUnreadMessages((prev) => {
+            const updated = { ...prev };
+            delete updated[selectedChat];
+             return updated;
+          });
+        
         } catch (error) {
           console.error("Error fetching messages:", error);
         }
@@ -502,6 +528,7 @@ const Message = ({ token, privateKey }) => {
               setShowOnlyContacts={setShowOnlyContacts}
               lastMessageTimes={lastMessageTimes}
               socket={socket}
+              unreadMessages={unreadMessages}                                                                                                         
             />
           )}
         </div>
