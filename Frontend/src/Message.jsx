@@ -758,7 +758,7 @@ import logo from "./assets/logo.png";
 import { motion } from "framer-motion";
 
 // Notification sound (place notification.mp3 in public/)
-const notificationSound = new Audio('/Notification.mp3');
+const notificationSound = new Audio(<audio src="/Notification.mp3" controls></audio>);
 
 const safeRender = (value, fallback = "Unknown") => {
     if (value === null || value === undefined) return fallback;
