@@ -38,7 +38,7 @@ router.post('/upload', authenticate, upload.single('file'), async (req, res) => 
 
         const fileData = {
             name: req.file.originalName,
-            url: `https://kyadari-tarun-internal-chatbox.onrender.com${fileDoc.path}`,
+            url: `https://hyperchat-t.onrender.com${fileDoc.path}`,
             size: req.file.size,
             mimeType: req.file.mimetype,
             _id: fileDoc._id
@@ -89,7 +89,7 @@ router.post('/upload/profile-photo', authenticate, upload.single('photo'), async
         user.image = req.file.filename;
         await user.save();
 
-        const photoUrl = `https://kyadari-tarun-internal-chatbox.onrender.com/uploads/${req.file.filename}`;
+        const photoUrl = `https://hyperchat-t.onrender.com/uploads/${req.file.filename}`;
         res.json({ url: photoUrl });
 
     } catch (error) {

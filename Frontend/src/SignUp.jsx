@@ -26,7 +26,7 @@ export default function SignUp({ authState, updateAuth }) {
 
     try {
       updateAuth({ isLoading: true, error: null });
-      const res = await axios.post("https://kyadari-tarun-internal-chatbox.onrender.com/api/signup", {
+      const res = await axios.post("https://hyperchat-t.onrender.com/api/signup", {
         name: form.name,
         email: form.email,
         password: form.password,
