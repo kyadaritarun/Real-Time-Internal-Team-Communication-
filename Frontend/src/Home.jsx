@@ -22,7 +22,7 @@ function Home() {
         <h1 className="font-poppins text-xl sm:text-2xl md:text-3xl font-bold 
                       text-red-600 hover:text-red-700 transition duration-300"
         >
-        Hyperchat-T
+        Hyperchat
         </h1>
         <p className="text-gray-800 mb-4 text-sm sm:text-base md:text-lg 
                      hover:text-gray-800 font-inter"
