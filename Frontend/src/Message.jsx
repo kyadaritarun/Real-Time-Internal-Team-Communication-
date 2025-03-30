@@ -204,7 +204,7 @@ const Message = ({ token, privateKey }) => {
             .catch((err) => console.error("Sound play error:", err));
           new Notification("New Message", {
             body: `You have a new message from ${safeRender(users.find((u) => u._id === senderId)?.name, "Someone")}`,
-            icon: logo, // Optional: Add an icon for the notification
+            icon: {logo}, // Optional: Add an icon for the notification
           });
         } else {
           console.log("Notification sound skipped: Permission not granted");

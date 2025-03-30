@@ -9,7 +9,6 @@ function Home() {
   return (
     <div
       className=" bg-gray-100 flex items-center justify-center min-h-screen bg-cover bg-center"
-      // style={{ backgroundImage: "url('/backgroundimg.jpg')" }}
      >
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-md p-4 sm:p-6 md:p-8 
                      mx-4 sm:mx-0 text-center transition-shadow duration-300 hover:shadow-3xl"
